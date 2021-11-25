@@ -2,36 +2,47 @@
 
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 
-using namespace std;
-
-/**
-* \brief Математическая функция, рассчитывающая объём шара
-* \r - радиус шара
-**/
-double GetVolume(const double r);
-
-/**
-* \brief Математическая функция, рассчитывающая площадь поверхности шара
-* \r - радиус шара
-**/
-double GetSurfaceArea(const double r);
+enum class Choice
+{
+AREA,
+VOLUME
+};
 
 /**
  * \brief Точка входа в программу.
+ * \return Возвращает 0 в случае успеха.
  */
-int main() {
-  double r;
+ 
+int main()
+{
 
-  cout << "Введите радиус и нажмите Enter: \n";
-  cin >> r;
+  double radius;
+	std::cout << "Введите радиус r ";
+	std::cin >> radius;
+    std::cout << "Введите что нужно найти (Объём или Площадь) "
+        << "Объём - " << static_cast<int>(Choice::VOLUME)
+        << "Площадь - " << static_cast<int>(Choice::AREA)
+        << " ";
 
-	const auto Volume = getVolume(r);
-	const auto SurfaceArea = getSurfaceArea(r);
+    int input;
+    std::cin >> input;
 
-	cout << "Радиус r = " << r << "\nОбъём шара = " << Volume << "\nПлощадь поверхности шара = " << SurfaceArea;
-	return 0;
+
+    const auto RESULT = static_cast<Choice>(input);
+    switch (RESULT)
+    {
+        case Choice::AREA:{
+            const double Area=pow(radius, 3) * ((4 * M_PI)/3);
+            std::cout << "Площадь поверхности =" << Area;
+            break;}
+        case Choice::VOLUME:{
+           const double Volume=pow(radius, 2) * M_PI * 4;
+            std::cout << "Объём=" << Volume;
+            break;}
+       
+    }
+
+    return 0;
 }
-
-double GetVolume(const double r) { return pow(r, 3) * ((4 * M_PI)/3); } 
-double GetSurfaceArea(const double r) { return pow(r, 2) * M_PI * 4; } 

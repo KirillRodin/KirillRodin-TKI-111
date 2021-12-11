@@ -7,6 +7,11 @@
 
 using namespace std;
 
+/**
+ * \brief Функциия для расчета y
+ * \param x Параметр x
+ * \return Выводит значение y
+ */
 double Calculate(const double x);
 
 /**
@@ -15,28 +20,27 @@ double Calculate(const double x);
  */
 int main()
 {
-	const auto left = 2.0;
-	const auto right = 3.0;
-	const auto step = 0.1;
+ const auto left = 2.0;
+ const auto right = 3.0;
+ const auto step = 0.1;
 
-	auto x = left;
-	cout << "x" << setw(15) << "y\n";
+ auto x = left;
+ cout << "x" << setw(15) << "y\n";
 
-	while ((x < right) || (abs(x - right) < step))
+ while ((x < right) || (abs(x - right) < step))
 	{
 	 if (Calculate(x))
-	 {
+	  {
 	  const auto y = Calculate(x);
 	  cout << setw(10) << setprecision(2) << x << setw(15)
-          << setprecision(5) << y << endl;
+    << setprecision(5) << y << endl;
 	  }
 	 else
 	  {
 	   cout << setw(10) << setprecision(2) << x << setw(15)
-	   << "Отсутствие решения" << endl;
-    }
+	   << "Отсутствие решения" << endl; }
 	x = x + step;
-	}
+  }
 	return 0;
 }
 

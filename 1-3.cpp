@@ -18,14 +18,14 @@ double getEnergy(const double m, const double v);
  * \return Возвращает 0 в случае успешного выполнения.
  */
 int main() {
+  setlocale(LC_ALL, "Russian");
   double m, v;
-  
   cout << "Введите массу и скорость и нажмите Enter: \n";
   cin >> m >> v;
 
 	const auto energy = getEnergy(m, v);
 	
-	cout << "Масса m = " << m << "\nСкорость v = " << v << "\nКинетическая энергия = " << E;
+	cout << "Масса m = " << m << "\nСкорость v = " << v << "\nКинетическая энергия = " << energy;
 	return 0;
 }
 

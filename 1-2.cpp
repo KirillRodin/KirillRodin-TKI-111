@@ -5,8 +5,20 @@
 
 using namespace std;
 
+/**
+*\brief Рассчитывает площадь прямоугольника
+ * \param a длина стороны
+ * \param n коэффициент
+ * \return Площадь прямоугольника
+ */
 double getSquare(const double a, const double n);
 
+/**
+ * \brief Вычисляет периметр прямоугольника
+ * \param a длина стороны
+ * \param n коэффициент
+ * \return Периметр прямоугольника
+ */
 double getPerimeter(const double a, const double n);
 
 /**

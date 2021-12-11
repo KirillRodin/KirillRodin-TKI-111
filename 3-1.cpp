@@ -24,19 +24,18 @@ int main()
 
 	while ((x < right) || (abs(x - right) < step))
 	{
-		if (Calculate(x))
-		{
-			const auto y = Calculate(x);
-			cout << setw(10) << setprecision(2) << x << setw(15)
-				<< setprecision(5) << y << endl;
-		}
-		else
-		{
-			cout << setw(10) << setprecision(2) << x << setw(15)
-				<< "Отсутствие решения" << endl;
-		}
-		x = x + step;
-
+	 if (Calculate(x))
+	 {
+	  const auto y = Calculate(x);
+	  cout << setw(10) << setprecision(2) << x << setw(15)
+          << setprecision(5) << y << endl;
+	  }
+	 else
+	  {
+	   cout << setw(10) << setprecision(2) << x << setw(15)
+	   << "Отсутствие решения" << endl;
+          }
+	x = x + step;
 	}
 	return 0;
 }

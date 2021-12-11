@@ -34,16 +34,18 @@ int main()
 	  {
 	   cout << setw(10) << setprecision(2) << x << setw(15)
 	   << "Отсутствие решения" << endl;
-          }
+    }
 	x = x + step;
 	}
 	return 0;
 }
 
-bool isCalculated(const double x) {
-	return x >= numeric_limits<double>::min();
+bool isCalculated(const double x) 
+{
+return x >= numeric_limits<double>::min();
 }
 
-double Calculate(const double x) {
-	return 3 * sin(sqrt(x)) + 0.39 * x - 3.8;
+double Calculate(const double x) 
+{
+return 3 * sin(sqrt(x)) + 0.39 * x - 3.8;
 }

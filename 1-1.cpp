@@ -1,25 +1,25 @@
 #define _USE_MATH_DEFINES
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 
 /**
 * \brief Математическая функция, рассчитывающая значение a
-* \param const double x - константа, имеющая тип данных с плавающей точкой двойной точности
-* \param const double y - константа, имеющая тип данных с плавающей точкой двойной точности
-* \param const double z - константа, имеющая тип данных с плавающей точкой двойной точности
-* \return Возвращает значение a
+* \param x - константа
+* \param y - константа
+* \param z - константа
+* \return Выводит значение a
 **/
 double getA(const double x, const double y, const double z);
 
 /**
 * \brief Математическая функция, рассчитывающая значение b
-* \param const double x - константа, имеющая тип данных с плавающей точкой двойной точности
-* \param const double y - константа, имеющая тип данных с плавающей точкой двойной точности
-* \param const double z - константа, имеющая тип данных с плавающей точкой двойной точности
-* \return Возвращает значение b
+* \param x - константа
+* \param y - константа
+* \param z - константа
+* \return Выводит значение b
 **/
 double getB(const double x, const double y, const double z);
 

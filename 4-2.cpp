@@ -24,48 +24,42 @@ void vSetArray(int iSize, int* piArray) {
 	while (iChoice < 1 || iChoice > 2) {
 		cin >> iChoice;
 	}
-
 	if (iChoice == 1) {
 		cout << "Введите значения в диапазоне [-10;10]:" << endl;
 		for (int i = 0; i < iSize; i++) {
 
 			int iValue = -11;
 			cin >> iValue;
-
 			while (iValue < -10 || iValue > 10) {
 				cout << "Введите значение в диапазоне [-10;10]" << endl;
 				cin >> iValue;
 			}
-
 			piArray[i] = iValue;
-		}
+          }
 	}
 
 	else if (iChoice == 2) {
-		for (int i = 0; i < iSize; i++) {
-			piArray[i] = rand() % 21 - 10;
-		}
+	for (int i = 0; i < iSize; i++) {
+	piArray[i] = rand() % 21 - 10;
+	   }
 	}
-
 	vGetArray(iSize, piArray);
 }
-
 void vReplace(int iSize, int* piArray) {
-
 	int iValue = -11;
 	for (int i = 0; i < iSize; i++) {
-		if (piArray[i] < 0 && piArray[i] > iValue) {
-			iValue = piArray[i];
+	if (piArray[i] < 0 && piArray[i] > iValue) {
+	iValue = piArray[i];
 		}
 	}
 
 	// Замена на отрицательные элементы
 	if (iValue != -11) {
-		piArray[2] = iValue;
+	piArray[2] = iValue;
 	}
 	else {
 		cout << "В массиве отсутствуют отрицательные элементы" << endl;
-	}
+	     }
 
 	vGetArray(iSize, piArray);
 }
@@ -78,44 +72,39 @@ void vPaste(int& iSize, int*& piArray) {
 	int iK = 0;
 	cout << "Введите число К:" << endl;
 	cin >> iK;
-
 	int iCount = 0;
-
 	int* piIndexes = new int[iSize];
 
 	for (int i = 0; i < iSize; i++) {
 
 		bool bSign = false;
-
 		int iValue = abs(piArray[i]);
-
 		int iDigits = sizeof(iValue) / sizeof(int);
-
 		for (int j = 0; j < iDigits; j++) {
-
 			int iNum = pow(10, j);
-
-			if (iValue / iNum == 1) {
+			if (iValue / iNum == 1)
+			{
 				bSign = true;
 				break;
 			}
 		}
 
-		if (bSign) {
+		if (bSign) 
+		{
 			iCount += 1;
 		}
-
 		piIndexes[i] = i + iCount;
 	}
-
 	int iNewSize = piIndexes[iSize - 1] + 1;
 
 	int* piNewArray = new int[iNewSize];
-	for (int i = 0; i < iNewSize; i++) { 
+	for (int i = 0; i < iNewSize; i++) 
+	{ 
 		piNewArray[i] = iK;
 	}
 
-	for (int i = 0; i < iSize; i++) {
+	for (int i = 0; i < iSize; i++) 
+	{
 		piNewArray[piIndexes[i]] = piArray[i];
 	}
 
@@ -130,12 +119,13 @@ void vPaste(int& iSize, int*& piArray) {
 void vInit(int iSize, int* piArray) {
 
 	int* piNewArray = new int[iSize];
-
 	for (int i = 0; i < iSize; i++) {
-		if (i % 2) {
+		if (i % 2) 
+		{
 			piNewArray[i] = piArray[i] / i;
 		}
-		else {
+		else 
+		{
 			piNewArray[i] = pow(piArray[i], 2);
 		}
 	}

@@ -22,11 +22,10 @@ void vSetArray(int iSize, int* piArray) {
 		 << "1 - Ввести значения вручную" << endl
 		 << "2 - Заполнить массив случайными числами" << endl;
 	cin >> iChoice;
-	while (iChoice < 1 || iChoice > 2) { // Если введено неверное число
+	while (iChoice < 1 || iChoice > 2) { 
 		cin >> iChoice;
 	}
 	
-	// Заполнение вручную
 	if (iChoice == 1) {
 		cout << "Введите значения в диапазоне [-10;10]:" << endl;
 		for (int i = 0; i < iSize; i++) {
@@ -34,7 +33,6 @@ void vSetArray(int iSize, int* piArray) {
 			int iValue = -11;
 			cin >> iValue;
 
-			// Если введено значение вне диапазона
 			while (iValue < -10 || iValue > 10) {
 				cout << "Введите значение в диапазоне [-10;10]" << endl;
 				cin >> iValue;
@@ -44,7 +42,6 @@ void vSetArray(int iSize, int* piArray) {
 		}
 	}
 
-	// Заполнение случайными числами
 	else if (iChoice == 2) {
     srand(time(NULL));
 		for (int i = 0; i < iSize; i++) {
@@ -61,14 +58,14 @@ void vSetArray(int iSize, int* piArray) {
 void vSum(int iSize, int* piArray) {
 	int iSum = 0;
 	for (int i = 0; i < iSize; i++) {
-		if (piArray[i] % 2) { // Если число - нечетное (остаток от деления = 1)
+		if (piArray[i] % 2) { 
 			iSum += piArray[i];
 		}
 	}
 	cout << "Сумма = " << iSum << endl;
 }
 
-// Вывести индексы элементов, значение которых меньше А
+// Индексы элементов, значение которых меньше А
 void vIndex(int iSize, int* piArray) {
 
 	int iA = 0;
@@ -84,18 +81,16 @@ void vIndex(int iSize, int* piArray) {
 	cout << endl;
 }
 
-// Заменить второй элемент массива на максимальный среди отрицательных
+// Замена второго элемента массива на максимальный среди отрицательных
 void vReplace(int iSize, int* piArray) {
 
 	int iValue = -11;
-	// Поиск максимального отрицательного элемента
 	for (int i = 0; i < iSize; i++) {
 		if (piArray[i] < 0 && piArray[i] > iValue) {
 			iValue = piArray[i];
 		}
 	}
 
-	// Замена
 	if (iValue != -11) {
 		piArray[2] = iValue;
 	}
@@ -110,10 +105,8 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	// Переменная управления
 	int iMenu = 0;
 
-	// Размерность массива
 	int iSize = 0;
 
 	cout << "Введите размерность массива:" << endl;
@@ -130,7 +123,7 @@ int main()
 			 << "4 - Выход" << endl;
 
 		cin >> iMenu;
-		while (iMenu < 1 || iMenu > 4) { // Если введено неверное число
+		while (iMenu < 1 || iMenu > 4) { 
 			cin >> iMenu;
 		}
 

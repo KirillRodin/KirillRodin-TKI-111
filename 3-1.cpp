@@ -1,55 +1,54 @@
 #define _USE_MATH_DEFINES
 
-
 #include <cmath>
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
+/**
+ * \brief Рассчитывает значение y при заданном x.
+ * \param x Значение x
+ * \return Значение y при заданном x
+ */
+double Count(double x);
 
 /**
- * \brief Функциия для расчета y
- * \param x Параметр x
- * \return Выводит значение y
+ * \brief Проверка y при заданном х
+ * \param x Значение x
+ * \return true, y существует при заданном х
  */
-double Calculate(const double x);
+bool isCalculated(double x);
 
 /**
  * \brief Точка входа в программу
- * \return Возвращает нуль, в случае успеха
+ * \return (Код 0) Успех
  */
 int main()
 {
- const auto left = 2.0;
- const auto right = 3.0;
- const auto step = 0.1;
+    const double x_0 = 2;
+    const double x_1 = 3.1;
+    const double step = 0.1;
+    double x = x_0;
+    while(x < x_1)
+    {
+        if (isCalculated(x))
+        {
+            const double y = Count(x);
+            std::cout << "x = " << std::setw(10) << std::left << std::setprecision(4) << x << " y = " << y << "\n";
+        }
+        else
+        {
+            std::cout << "При x = " << x << " y не существует" << "\n";
+        }
 
- auto x = left;
- cout << "x" << setw(15) << "y\n";
-
- while ((x < right) || (abs(x - right) < step))
-	{
-	 if (Calculate(x))
-	  {
-	  const auto y = Calculate(x);
-	  cout << setw(10) << setprecision(2) << x << setw(15)
-    << setprecision(5) << y << endl;
-	  }
-	 else
-	  {
-	   cout << setw(10) << setprecision(2) << x << setw(15)
-	   << "Отсутствие решения" << endl; }
-	x = x + step;
-  }
-	return 0;
+        x += step;
+    }
+    return 0;
 }
 
-bool isCalculated(const double x) 
-{
-return x >= numeric_limits<double>::min();
+double Count(const double x){
+    return 3 * sin(sqrt(x)) + 0.39 * x - 3.8;
 }
 
-double Calculate(const double x) 
-{
-return 3 * sin(sqrt(x)) + 0.39 * x - 3.8;
+bool isCalculated(const double x){
+    return x >= 0;
 }

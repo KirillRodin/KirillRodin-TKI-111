@@ -33,8 +33,8 @@ size_t getSequenceSize(const string& message);
 double getRecurrentNumber(const size_t index) noexcept;
 
 /**
- * \brief Точка входа в программу.
- * \return 0 – в случае успеха,<br/>1 – в противном случае.
+ * \brief Точка входа в программу
+ * \return 0 – в случае успеха,<br/>1 – в противном случае
  */
 int main() noexcept
 {
@@ -53,9 +53,9 @@ int main() noexcept
             }
             sum += current;
         }
-        cout << "Итоговая сумма равна: " << sum << endl;
         const auto eps = getEpsilon("Введите точность вычислений ");
         const double sumE = getSumE(eps);
+        cout << "Итоговая сумма равна: " << sum << endl;
         cout << "Сумма последовательности c точностью " << eps << " равна: " << sumE << endl;
         return 0;
     }

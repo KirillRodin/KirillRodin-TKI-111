@@ -3,105 +3,111 @@
 using namespace std;
 
 /**
-* \brief Функция для рассчета факториала
-* \param iK - целое число, факториал, которого будет вычисляться
-* \param i - счетчик
-* \param iRes - переменная для хранения текущего результата
-* \return Возвращает значение y1
-**/
-double dFactorial(int iK) {
-	int iRes = 1;
-	for (int i = 1; i <= iK; i++) {
-		iRes = iRes * i;
-	}
-	return iRes;
-}
+ * \brief Пользовательский ввод необходимой точности вычисления.
+ * \param message Мотивационное сообщение
+ * \return Точность вычисления
+ * \exception invalid_argument В случае, если epsilon меньше 0
+ */
+double getEpsilon(const string& message);
 
-// Функция расчета i-го члена последовательности последовательности
-double dSequence(int i) {
-	return 1 / (dFactorial(i + 2) * dFactorial(i + 3));
-}
+/**
+ * \brief Рассчитывает сумму последовательность с точностью epsilon
+ * \param eps Точность вычисления
+ * \return Сумма последовательности с точностью epsilon
+ */
+double getSumE(const double eps);
 
-// Вычисляет сумму первых n членов последовательности
-void vSumN() {
+/**
+ * \brief Пользовательский ввод количества членов последовательности
+ * \param message Мотивационное сообщение
+ * \return Размер последовательности
+ * \exception invalid_argument В случае, если размер последовательности меньше 1
+ */
+size_t getSequenceSize(const string& message);
 
-	int n = 0;
-	cout << "Введите количество членов последовательности:" << endl;
-	cin >> n;
-	while (cin.fail()) {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Введите число!" << endl;
-	}
+/**
+ * \brief Рассчитывает значение рекуррентного члена в зависимости от индекса
+ * \param index Индекс, номер итерации
+ * \return Значение рекуррентного члена
+ */
+double getRecurrentNumber(const size_t index) noexcept;
 
-	double dSum = 0;
-	int k = 0;
-	while (k < n)
-	{
-		dSum += dSequence(k);
-		k++;
-	}
-	cout << "Итоговая сумма: " << dSum << endl;
-}
-
-// Вычисляет сумму всех членов последовательности, не меньших заданного числа e
-void vSumE() {
-	
-	double dEpsilon = 0.0;
-	cout << "Введите число Epsilon:" << endl;
-	cin >> dEpsilon;
-	while (cin.fail()) {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Введите число!" << endl;
-	}
-
-	double dSum = 0;
-	int k = 0;
-	while (abs(dSequence(k)) > dEpsilon)
-	{
-		dSum += dSequence(k);
-		k++;
-	}
-
-	cout << "Итоговая сумма: " << dSum << endl;
-}
-
-int main()
+/**
+ * \brief Точка входа в программу.
+ * \return 0 – в случае успеха,<br/>1 – в противном случае.
+ */
+int main() noexcept
 {
-	setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian");
+    try
+    {
+        const auto size = getSequenceSize("Введите количество членов последовательности n = ");
+        double current = 0;
+        double sum = 0;
+        for (int i = 0; i < size; i++) {
+            if (i == 0) {
+                current = 1;
+            }
+            else {
+                current *= getRecurrentNumber(i - 1);
+            }
+            sum += current;
+        }
+        cout << "Итоговая сумма равна: " << sum << endl;
+        const auto eps = getEpsilon("Введите точность вычислений ");
+        const double sumE = getSumE(eps);
+        cout << "Сумма последовательности c точностью " << eps << " равна: " << sumE << endl;
+        return 0;
+    }
+    catch (const exception& e)
+    {
+        cerr << e.what() << endl;
+        return 1;
+    }
+}
+double getSumE(const double eps) {
+    size_t i = 0;
+    double sumE = 0;
+    double current = eps + 1;
+    while (abs(current) >= eps) {
+        if (i == 0) {
+            current = 1;
+        }
+        else {
+            current *= getRecurrentNumber(i - 1);
+        }
+        sumE += current;
+        i++;
+    }
+    return sumE;
+}
+double getEpsilon(const string& message)
+{
+    cout << message;
+    double eps = 0;
+    cin >> eps;
+    if (eps < 0)
+    {
+        throw invalid_argument("Значение должно быть больше 0!");
+    }
 
-	int iMenu = 0;
-	while (iMenu != 3) {
+    return eps;
+}
 
-		cout << "1 - Вычислить сумму первых n членов последовательности" << endl
-			 << "2 - Вычислить сумму всех членов последовательности, не меньших заданного числа e" << endl
-			 << "3 - Выход" << endl;
+size_t getSequenceSize(const string& message)
+{
+    cout << message;
+    int size = 0;
+    cin >> size;
+    if (size < 1)
+    {
+        throw invalid_argument("Значение должно быть больше 0!");
+    }
 
-		cin >> iMenu;
-		while (cin.fail() || iMenu < 1 || iMenu > 3) {
-			if (cin.fail()) { 
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Введите верное число!" << endl;
-			}
-			else { 
-				cin >> iMenu;
-			}
-		}
+    return size;
+}
 
-		switch (iMenu) {
-			case 1: {
-				vSumN();
-				break;
-			}
-			case 2: {
-				vSumE();
-				break;
-			}
-			case 3: {
-				break;
-			}
-		}
-	}
+double getRecurrentNumber(const size_t index) noexcept
+{
+    return -1.0 / ((index + 3) * (index + 4));
 }

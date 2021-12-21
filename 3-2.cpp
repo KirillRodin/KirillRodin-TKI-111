@@ -11,6 +11,13 @@ using namespace std;
 double getEpsilon(const string& message);
 
 /**
+ * \brief Рассчитывает сумму последовательности
+ * \param size Количество членов последовательности
+ * \return Сумма последовательности
+ */
+double getSum(const size_t size);
+
+/**
  * \brief Рассчитывает сумму последовательность с точностью epsilon
  * \param eps Точность вычисления
  * \return Сумма последовательности с точностью epsilon
@@ -42,18 +49,8 @@ int main() noexcept
     try
     {
         const auto size = getSequenceSize("Введите количество членов последовательности n = ");
-        double current = 0;
-        double sum = 0;
-        for (int i = 0; i < size; i++) {
-            if (i == 0) {
-                current = 1;
-            }
-            else {
-                current *= getRecurrentNumber(i - 1);
-            }
-            sum += current;
-        }
         const auto eps = getEpsilon("Введите точность вычислений ");
+        const double sum = getSum(size);
         const double sumE = getSumE(eps);
         cout << "Итоговая сумма равна: " << sum << endl;
         cout << "Сумма последовательности c точностью " << eps << " равна: " << sumE << endl;
@@ -65,6 +62,21 @@ int main() noexcept
         return 1;
     }
 }
+double getSum (const size_t size){
+    double current = 0;
+    double sum = 0;
+    for (int i = 0; i < size; i++) {
+       if (i == 0) {
+          current = 1;
+            }
+        else {
+         current *= getRecurrentNumber(i - 1);
+            }
+         sum += current;
+        }
+    return sum;
+}
+
 double getSumE(const double eps) {
     size_t i = 0;
     double sumE = 0;

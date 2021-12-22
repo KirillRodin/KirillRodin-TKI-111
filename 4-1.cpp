@@ -1,151 +1,211 @@
 #include <iostream>
-#include <cstdlib>
+#include <sstream>
+#include <random>
 
 using namespace std;
 
-// Вывод массива
-// iSize - размер массива
-// piArray - указатель на массив
-void vGetArray(int iSize, int* piArray) {
-	cout << "Итоговый массив: ";
-	for (int i = 0; i < iSize; i++) {
-		cout << piArray[i] << " ";
-	}
-	cout << endl;
-}
+/**
+ * \brief Способы задания массива
+ */
+enum class Choice
+{
+    /**
+     * \brief Ввод вручную
+     */
+    Manual,
 
-// Заполнение массива
-void vSetArray(int iSize, int* piArray) {
+    /**
+     * \brief Ввод с помощью рандномных чисел
+     */
+     Random
+};
 
-	int iChoice = 0;
-	cout << "Заполнение массива" << endl
-		 << "1 - Ввести значения вручную" << endl
-		 << "2 - Заполнить массив случайными числами" << endl;
-	cin >> iChoice;
-	while (iChoice < 1 || iChoice > 2) { 
-		cin >> iChoice;
-	}
-	
-	if (iChoice == 1) {
-		cout << "Введите значения в диапазоне [-10;10]:" << endl;
-		for (int i = 0; i < iSize; i++) {
+/**
+ * \brief Метод заполнения массива
+ * \param size Размер массива
+ * \param selection Выбор создания массива (вручную или случайными числами)
+ * \param MinValue Минимальное значение в интервале (-10)
+ * \param MaxValue Максимальное значение в интервале (10)
+ * \return Массив
+ */
+int* GetArray(const size_t size, const int selection, const int MinValue, const int MaxValue);
 
-			int iValue = -11;
-			cin >> iValue;
+/**
+ * \brief Получение массива
+ * \param message Мотивоционное сообщение для пользователя
+ * \return Размер массива
+ */
+size_t GetSize(const string& message);
 
-			while (iValue < -10 || iValue > 10) {
-				cout << "Введите значение в диапазоне [-10;10]" << endl;
-				cin >> iValue;
-			}
+/**
+ * \brief Вывод элементов массива
+ * \param size Размер массива
+ * \return Строка со значениями индексов массива
+ */
+string InString(const int*, const size_t size);
 
-			piArray[i] = iValue;
-		}
-	}
+/**
+ * \brief Функция для нахождения суммы элементов, имеющих нечетное значение
+ * \param size Размер массива
+ * \return Сумма элементов, имеющих нечетное значение
+ */
+int Sum(int*, const size_t size);
 
-	else if (iChoice == 2) {
-    srand(time(NULL));
-		for (int i = 0; i < iSize; i++) {
-			piArray[i] = rand() % 21 - 10;
-		}
-	}
+/**
+ * \brief Находит индексы элементов значения которых меньше A
+ * \param size Размер массива
+ * \param A Число A
+ * \return Индексы элементов
+ */
+void Index(int*, const size_t size, const int A);
 
-	vGetArray(iSize, piArray);
-}
+/**
+ * \brief Функция для замены второго элемента массива на максимальный (математически) среди отрицательных
+ * \param size Размер массива
+ * \return Массив с совершенной заменой
+ */
+void Replace(int*, const size_t size);
 
-// Сумма элементов, имеющих нечетное значение
-// iSize - размер массива
-// piArray - указатель на массив
-void vSum(int iSize, int* piArray) {
-	int iSum = 0;
-	for (int i = 0; i < iSize; i++) {
-		if (piArray[i] % 2) { 
-			iSum += piArray[i];
-		}
-	}
-	cout << "Сумма = " << iSum << endl;
-}
-
-// Индексы элементов, значение которых меньше А
-void vIndex(int iSize, int* piArray) {
-
-	int iA = 0;
-	cout << "Введите число А:" << endl;
-	cin >> iA;
-	cout << "Индексы: ";
-
-	for (int i = 0; i < iSize; i++) {
-		if (piArray[i] < iA) {
-			cout << i << " ";
-		}
-	}
-	cout << endl;
-}
-
-// Замена второго элемента массива на максимальный среди отрицательных
-void vReplace(int iSize, int* piArray) {
-
-	int iValue = -11;
-	for (int i = 0; i < iSize; i++) {
-		if (piArray[i] < 0 && piArray[i] > iValue) {
-			iValue = piArray[i];
-		}
-	}
-
-	if (iValue != -11) {
-		piArray[2] = iValue;
-	}
-	else {
-		cout << "В массиве отсутствуют отрицательные элементы" << endl;
-	}
-
-	vGetArray(iSize, piArray);
-}
-
+/**
+ * \brief Точка входа в программу
+ * \return (Код ошибки 0) успех
+ */
 int main()
 {
-	setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian");
+    auto error_code = 0;
+    int* my_array = nullptr;
+    const int MinValue = -11;
+    const int MaxValue = 11;
+    try
+    {
+        const auto size = GetSize("Введите размер массива: ");
+        cout << "Выберите способ создания массива: " << static_cast<int>(Choice::Manual) << " - вручную, " << static_cast<int>(Choice::Random) << " - заполнить случайными числами ";
+        int input_type;
+        cin >> input_type;
+        my_array = GetArray(size, input_type, MinValue, MaxValue);
+        cout << "Итоговый массив:\n";
+        cout << InString(my_array, size);
+        cout << "\nСумма элементов, имеющих нечетное значение: " << Sum(my_array, size) << '\n';
+        int A;
+        cout << "Введите число A: ";
+        cin >> A;
+        cout << "Индексы: ";
+        Index(my_array, size, A);
+        cout << "\nМассив после замены второго элемента массива на максимальный среди отрицательных:\n";
+        Replace(my_array, size);
+        cout << InString(my_array, size);
+    }
+    catch (exception& e)
+    {
+        cout << e.what();
+        error_code = 1;
+    }
 
-	int iMenu = 0;
+    if (my_array != nullptr)
+    {
+        delete[] my_array;
+        my_array = nullptr;
+    }
+    return error_code;
+}
 
-	int iSize = 0;
+size_t GetSize(const string& message)
+{
+    int size = -1;
+    cout << message;
+    cin >> size;
 
-	cout << "Введите размерность массива:" << endl;
-	cin >> iSize;
+    if (size < 0)
+    {
+        throw out_of_range("Incorrect size. Value has to be greater or equal zero.");
+    }
 
-	int* piArray = new int[iSize];
-	vSetArray(iSize, piArray);
+    return size;
+}
 
-	while (iMenu != 4) {
+int* GetArray(const size_t size, const int selection, const int MinValue, const int MaxValue)
+{
+    if (size == 0)
+        throw out_of_range("Неправильный размер массива");
 
-		cout << "1 - Сумма элементов, имеющих нечетное значение" << endl
-			 << "2 - Вывести индексы элементов, значение которых меньше А" << endl
-			 << "3 - Заменить второй элемент массива на максимальный среди отрицательных" << endl
-			 << "4 - Выход" << endl;
+    const auto array = new int[size];
+    //Will be used to obtain a seed for the random number engine
+    random_device rd;
 
-		cin >> iMenu;
-		while (iMenu < 1 || iMenu > 4) { 
-			cin >> iMenu;
-		}
+    //Standard mersenne_twister_engine seeded with rd()
+    mt19937 gen(rd());
+    const uniform_int_distribution<> uniformIntDistribution(MinValue, MaxValue);
+    for (size_t index = 0; index < size; index++)
+    {
+        switch (selection)
+        {
+        case static_cast<int>(Choice::Manual):
+        {
+            cout << "Введите " << index + 1 << " элемент массива в диапозоне [-10;10]: ";
+            cin >> array[index];
+            break;
+        }
+        case static_cast<int>(Choice::Random):
+        {
+            array[index] = uniformIntDistribution(gen);
+            break;
+        }
+        default:
+            cout << "Ошибка!";
+        }
+    }
 
-		switch (iMenu) {
-			case 1: {
-				vSum(iSize, piArray);
-				break;
-			}
-			case 2: {
-				vIndex(iSize, piArray);
-				break;
-			}
-			case 3: {
-				vReplace(iSize, piArray);
-				break;
-			}
-			case 4: {
-				break;
-			}
-		}
-	}
+    return array;
+}
 
-	delete[] piArray;
-	return 0;
+string InString(const int* array, const size_t size)
+{
+    if (array == nullptr)
+        throw invalid_argument("Массив не существует");
+
+    stringstream buffer;
+    buffer << "{";
+    for (size_t index = 0; index < size - 1; index++)
+    {
+        buffer << array[index] << ", ";
+    }
+    buffer << array[size - 1] << "}";
+    return buffer.str();
+}
+
+int Sum(int* array, const size_t size) {
+    int Sum = 0;
+    for (size_t i = 0; i < size; i++) {
+        if (array[i] % 2)
+            Sum += array[i];
+    }
+    if (Sum == 1)
+        Sum = 0;
+    return Sum;
+}
+
+void Index(int* array, const size_t size,const int A) {
+    for (size_t i = 0; i < size; i++) {
+        if ((array[i]) < A) {
+            cout << i <<endl;
+        }
+    }
+}
+    
+void Replace(int* array, const size_t size) {
+    const int UnderMin = -11;
+    int Value = UnderMin;
+    for (size_t i = 0; i < size; i++) {
+        if (array[i] < 0 && array[i] > Value) {
+            Value = array[i];
+        }
+    }
+
+    if (Value != UnderMin) {
+        array[2] = Value;
+    }
+    else {
+        cout << "Массив остался прежним. В массиве отсутствуют отрицательные элементы!" << endl;
+    }
 }

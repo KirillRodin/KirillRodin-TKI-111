@@ -92,7 +92,7 @@ int main()
         cin >> A;
         cout << "Индексы: ";
         Index(my_array, size, A);
-        cout << "\nМассив после замены второго элемента массива на максимальный среди отрицательных:\n";
+        cout << "\nМассив после замены второго элемента массива на максимальный (математически) среди отрицательных:\n";
         Replace(my_array, size);
         cout << InString(my_array, size);
     }
@@ -116,9 +116,9 @@ size_t GetSize(const string& message)
     cout << message;
     cin >> size;
 
-    if (size < 0)
+    if (size <= 0)
     {
-        throw out_of_range("Incorrect size. Value has to be greater or equal zero.");
+        throw out_of_range("Неправильный размер массива");
     }
 
     return size;
@@ -126,9 +126,6 @@ size_t GetSize(const string& message)
 
 int* GetArray(const size_t size, const int selection, const int MinValue, const int MaxValue)
 {
-    if (size == 0)
-        throw out_of_range("Неправильный размер массива");
-
     const auto array = new int[size];
     //Will be used to obtain a seed for the random number engine
     random_device rd;
@@ -151,8 +148,6 @@ int* GetArray(const size_t size, const int selection, const int MinValue, const 
             array[index] = uniformIntDistribution(gen);
             break;
         }
-        default:
-            cout << "Ошибка!";
         }
     }
 
@@ -185,14 +180,14 @@ int Sum(int* array, const size_t size) {
     return Sum;
 }
 
-void Index(int* array, const size_t size,const int A) {
+void Index(int* array, const size_t size, const int A) {
     for (size_t i = 0; i < size; i++) {
         if ((array[i]) < A) {
-            cout << i <<endl;
+            cout << i << endl;
         }
     }
 }
-    
+
 void Replace(int* array, const size_t size) {
     const int UnderMin = -11;
     int Value = UnderMin;

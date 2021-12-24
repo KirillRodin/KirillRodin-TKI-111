@@ -24,11 +24,11 @@ enum class Choice
  * \brief Метод заполнения массива
  * \param size Размер массива
  * \param selection Выбор создания массива (вручную или случайными числами)
- * \param MinValue Минимальное значение в интервале (-10)
- * \param MaxValue Максимальное значение в интервале (10)
+ * \param min_value Минимальное значение в интервале (-10)
+ * \param maxv_alue Максимальное значение в интервале (10)
  * \return Массив
  */
-int* GetArray(const size_t size, const int selection, const int MinValue, const int MaxValue);
+int* GetArray(const size_t size, const int selection, const int min_value, const int max_value);
 
 /**
  * \brief Получение массива
@@ -42,7 +42,7 @@ size_t GetSize(const string& message);
  * \param size Размер массива
  * \return Строка со значениями индексов массива
  */
-string InString(const int*, const size_t size);
+string toString(const int*, const size_t size);
 
 /**
  * \brief Функция для нахождения суммы элементов, имеющих нечетное значение
@@ -54,10 +54,10 @@ int Sum(int*, const size_t size);
 /**
  * \brief Находит индексы элементов значения которых меньше A
  * \param size Размер массива
- * \param A Число A
+ * \param a Число a
  * \return Индексы элементов
  */
-void Index(int*, const size_t size, const int A);
+void Index(int*, const size_t size, const int a);
 
 /**
  * \brief Функция для замены второго элемента массива на максимальный (математически) среди отрицательных
@@ -75,26 +75,26 @@ int main()
     setlocale(LC_ALL, "Russian");
     auto error_code = 0;
     int* my_array = nullptr;
-    const int MinValue = -11;
-    const int MaxValue = 11;
+    const int min_value = -10;
+    const int max_value = 10;
     try
     {
         const auto size = GetSize("Введите размер массива: ");
         cout << "Выберите способ создания массива: " << static_cast<int>(Choice::Manual) << " - вручную, " << static_cast<int>(Choice::Random) << " - заполнить случайными числами ";
         int input_type;
         cin >> input_type;
-        my_array = GetArray(size, input_type, MinValue, MaxValue);
+        my_array = GetArray(size, input_type, min_value, max_value);
         cout << "Итоговый массив:\n";
-        cout << InString(my_array, size);
+        cout << toString(my_array, size);
         cout << "\nСумма элементов, имеющих нечетное значение: " << Sum(my_array, size) << '\n';
-        int A;
+        int a;
         cout << "Введите число A: ";
-        cin >> A;
+        cin >> a;
         cout << "Индексы: ";
-        Index(my_array, size, A);
-        cout << "\nМассив после замены второго элемента массива на максимальный (математически) среди отрицательных:\n";
+        Index(my_array, size, a);
+        cout << "\nМассив после замены второго элемента массива на максимальный среди отрицательных:\n";
         Replace(my_array, size);
-        cout << InString(my_array, size);
+        cout << toString(my_array, size);
     }
     catch (exception& e)
     {
@@ -124,7 +124,7 @@ size_t GetSize(const string& message)
     return size;
 }
 
-int* GetArray(const size_t size, const int selection, const int MinValue, const int MaxValue)
+int* GetArray(const size_t size, const int selection, const int min_value, const int max_value)
 {
     const auto array = new int[size];
     //Will be used to obtain a seed for the random number engine
@@ -132,7 +132,7 @@ int* GetArray(const size_t size, const int selection, const int MinValue, const 
 
     //Standard mersenne_twister_engine seeded with rd()
     mt19937 gen(rd());
-    const uniform_int_distribution<> uniformIntDistribution(MinValue, MaxValue);
+    const uniform_int_distribution<> uniformIntDistribution(min_value, max_value);
     for (size_t index = 0; index < size; index++)
     {
         switch (selection)
@@ -154,7 +154,7 @@ int* GetArray(const size_t size, const int selection, const int MinValue, const 
     return array;
 }
 
-string InString(const int* array, const size_t size)
+string toString(const int* array, const size_t size)
 {
     if (array == nullptr)
         throw invalid_argument("Массив не существует");
@@ -170,37 +170,28 @@ string InString(const int* array, const size_t size)
 }
 
 int Sum(int* array, const size_t size) {
-    int Sum = 0;
+    int sum = 0;
     for (size_t i = 0; i < size; i++) {
         if (array[i] % 2)
-            Sum += array[i];
+            sum += array[i];
     }
-    if (Sum == 1)
-        Sum = 0;
-    return Sum;
+    return sum;
 }
 
-void Index(int* array, const size_t size, const int A) {
+void Index(int* array, const size_t size, const int a) {
     for (size_t i = 0; i < size; i++) {
-        if ((array[i]) < A) {
+        if ((array[i]) < a) {
             cout << i << endl;
         }
     }
 }
 
 void Replace(int* array, const size_t size) {
-    const int UnderMin = -11;
-    int Value = UnderMin;
+    int Value = 0;
     for (size_t i = 0; i < size; i++) {
-        if (array[i] < 0 && array[i] > Value) {
+        if (array[i] < Value) {
             Value = array[i];
+            array[2] = Value;
         }
-    }
-
-    if (Value != UnderMin) {
-        array[2] = Value;
-    }
-    else {
-        cout << "Массив остался прежним. В массиве отсутствуют отрицательные элементы!" << endl;
     }
 }

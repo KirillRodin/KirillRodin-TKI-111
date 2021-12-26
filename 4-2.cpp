@@ -1,184 +1,233 @@
 #include <iostream>
+#include <sstream>
+#include <random>
 
 using namespace std;
 
-// Вывод массива
-// iSize - размер массива
-// piArray - указатель на массив
-void vGetArray(int iSize, int* piArray) {
-	cout << "Итоговый массив: ";
-	for (int i = 0; i < iSize; i++) {
-		cout << piArray[i] << " ";
-	}
-	cout << endl;
-}
+/**
+ * \brief Способы задания массива
+ */
+enum class Choice
+{
+    /**
+     * \brief Ввод вручную
+     */
+    Manual,
 
-// Заполнение массива
-void vSetArray(int iSize, int* piArray) {
+    /**
+     * \brief Ввод с помощью рандномных чисел
+     */
+     Random
+};
 
-	int iChoice = 0;
-	cout << "Заполнение массива" << endl
-		<< "1 - Ввести значения вручную" << endl
-		<< "2 - Заполнить массив случайными числами" << endl;
-	cin >> iChoice;
-	while (iChoice < 1 || iChoice > 2) {
-		cin >> iChoice;
-	}
-	if (iChoice == 1) {
-		cout << "Введите значения в диапазоне [-10;10]:" << endl;
-		for (int i = 0; i < iSize; i++) {
+/**
+ * \brief Метод заполнения массива
+ * \param size Размер массива
+ * \param selection Выбор создания массива (вручную или случайными числами)
+ * \param min_value Минимальное значение в интервале (-10)
+ * \param maxv_alue Максимальное значение в интервале (10)
+ * \return Массив
+ */
+int* GetArray(const size_t size, const int selection, const int min_value, const int max_value);
 
-			int iValue = -11;
-			cin >> iValue;
-			while (iValue < -10 || iValue > 10) {
-				cout << "Введите значение в диапазоне [-10;10]" << endl;
-				cin >> iValue;
-			}
-			piArray[i] = iValue;
-          }
-	}
+/**
+ * \brief Получение массива
+ * \param message Мотивоционное сообщение для пользователя
+ * \return Размер массива
+ */
+size_t GetSize(const string& message);
 
-	else if (iChoice == 2) {
-	for (int i = 0; i < iSize; i++) {
-	piArray[i] = rand() % 21 - 10;
-	   }
-	}
-	vGetArray(iSize, piArray);
-}
-void vReplace(int iSize, int* piArray) {
-	int iValue = -11;
-	for (int i = 0; i < iSize; i++) {
-	if (piArray[i] < 0 && piArray[i] > iValue) {
-	iValue = piArray[i];
-		}
-	}
+/**
+ * \brief Вывод элементов массива
+ * \param size Размер массива
+ * \return Строка со значениями индексов массива
+ */
+string toString(const int*, const size_t size);
 
-	// Замена на отрицательные элементы
-	if (iValue != -11) {
-	piArray[2] = iValue;
-	}
-	else {
-		cout << "В массиве отсутствуют отрицательные элементы" << endl;
-	     }
+/**
+ * \brief Функция для замены второго элемента массива на максимальный среди отрицательных
+ * \param size Размер массива
+ */
+void Replace(int*, const size_t size);
 
-	vGetArray(iSize, piArray);
-}
+/**
+ * \brief Функция для добавления в массив числа K
+ * \param size Размер массива
+ * \param index Номер элемента
+ * \param k Число K вводимое пользователем
+ */
+void AddElement(int*&, size_t& size, const size_t index, const int k);
 
-// Вставить число К перед всеми элементами, в которых есть цифра 1
-// iSize - ссылка на размер массива
-// piArray - ссылка на указатель на массив
-void vPaste(int& iSize, int*& piArray) {
+/**
+ * \brief Функция для вставки числа К перед всеми элементами в которых есть цифра 1
+ * \param size Размер массива
+ * \param k Число K вводимое пользователем
+ */
+void Paste(int*&, size_t& size, const int k);
 
-	int iK = 0;
-	cout << "Введите число К:" << endl;
-	cin >> iK;
-	int iCount = 0;
-	int* piIndexes = new int[iSize];
+/**
+ * \brief Формирует из массива D массив A по правилу (если номер четный, то значение элемента находится по формуле Ai = Di^2, а если нечетный, то по формуле Ai = Di / i)
+ * \param size Размер массива
+ * \return массив А
+ */
+int* FormArray(int*, const size_t size);
 
-	for (int i = 0; i < iSize; i++) {
-
-		bool bSign = false;
-		int iValue = abs(piArray[i]);
-		int iDigits = sizeof(iValue) / sizeof(int);
-		for (int j = 0; j < iDigits; j++) {
-			int iNum = pow(10, j);
-			if (iValue / iNum == 1)
-			{
-				bSign = true;
-				break;
-			}
-		}
-
-		if (bSign) 
-		{
-			iCount += 1;
-		}
-		piIndexes[i] = i + iCount;
-	}
-	int iNewSize = piIndexes[iSize - 1] + 1;
-
-	int* piNewArray = new int[iNewSize];
-	for (int i = 0; i < iNewSize; i++) 
-	{ 
-		piNewArray[i] = iK;
-	}
-
-	for (int i = 0; i < iSize; i++) 
-	{
-		piNewArray[piIndexes[i]] = piArray[i];
-	}
-
-	delete[] piArray;
-	piArray = piNewArray;
-	iSize = iNewSize;
-
-	vGetArray(iSize, piArray);
-}
-
-// Формирование массива А
-void vInit(int iSize, int* piArray) {
-
-	int* piNewArray = new int[iSize];
-	for (int i = 0; i < iSize; i++) {
-		if (i % 2) 
-		{
-			piNewArray[i] = piArray[i] / i;
-		}
-		else 
-		{
-			piNewArray[i] = pow(piArray[i], 2);
-		}
-	}
-
-	vGetArray(iSize, piNewArray);
-	delete[] piNewArray;
-}
-
+/**
+ * \brief Точка входа в программу
+ * \return (Код ошибки 0) успех
+ */
 int main()
 {
-	setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian");
+    auto error_code = 0;
+    int* my_array = nullptr;
+    const int min_value = -10;
+    const int max_value = 10;
+    try
+    {
+        auto size = GetSize("Введите размер массива: ");
+        cout << "Выберите способ создания массива: " << static_cast<int>(Choice::Manual) << " - вручную, " << static_cast<int>(Choice::Random) << " - заполнить случайными числами ";
+        int input_type;
+        cin >> input_type;
+        my_array = GetArray(size, input_type, min_value, max_value);
+        cout << "Итоговый массив:\n";
+        cout << toString(my_array, size);
+        cout << "\nМассив после замены второго элемента массива на максимальный среди отрицательных:\n ";
+        Replace(my_array, size);
+        cout << toString(my_array, size);
+        int k;
+        cout << "\nВведите число K: ";
+        cin >> k;
+        cout << "Массив после вставки числа К перед всеми элементами имеющими цифру 1:\n ";
+        Paste(my_array, size, k);
+        cout << toString(my_array, size);
+        cout << "\nНовый массив:\n ";
+        cout << toString(FormArray(my_array, size), size);
+    }
+    catch (exception& e)
+    {
+        cout << e.what();
+        error_code = 1;
+    }
 
-	int iMenu = 0;
+    if (my_array != nullptr)
+    {
+        delete[] my_array;
+        my_array = nullptr;
+    }
+    return error_code;
+}
 
-	int iSize = 0;
+size_t GetSize(const string& message)
+{
+    int size = -1;
+    cout << message;
+    cin >> size;
 
-	cout << "Введите размерность массива:" << endl;
-	cin >> iSize;
+    if (size <= 0)
+    {
+        throw out_of_range("Неправильный размер массива");
+    }
 
-	int* piArray = new int[iSize];
-	vSetArray(iSize, piArray);
+    return size;
+}
 
-	while (iMenu != 4) {
+int* GetArray(const size_t size, const int selection, const int min_value, const int max_value)
+{
+    const auto array = new int[size];
+    //Will be used to obtain a seed for the random number engine
+    random_device rd;
 
-		cout << "1 - Заменить второй элемент массива на максимальный среди отрицательных" << endl
-			 << "2 - Вставить число К перед всеми элементами, в которых есть цифра 1" << endl
-			 << "3 - Cформировать массив A" << endl
-			 << "4 - Выход" << endl;
+    //Standard mersenne_twister_engine seeded with rd()
+    mt19937 gen(rd());
+    const uniform_int_distribution<> uniformIntDistribution(min_value, max_value);
+    for (size_t index = 0; index < size; index++)
+    {
+        switch (selection)
+        {
+        case static_cast<int>(Choice::Manual):
+        {
+            cout << "Введите " << index + 1 << " элемент массива в диапозоне [-10;10]: ";
+            cin >> array[index];
+            break;
+        }
+        case static_cast<int>(Choice::Random):
+        {
+            array[index] = uniformIntDistribution(gen);
+            break;
+        }
+        }
+    }
 
-		cin >> iMenu;
-		while (iMenu < 1 || iMenu > 4) { 
-			cin >> iMenu;
-		}
+    return array;
+}
 
-		switch (iMenu) {
-			case 1: {
-				vReplace(iSize, piArray);
-				break;
-			}
-			case 2: {
-				vPaste(iSize, piArray);
-				break;
-			}
-			case 3: {
-				vInit(iSize, piArray);
-				break;
-			}
-			case 4: {
-				break;
-			}
-		}
-	}
+string toString(const int* array, const size_t size)
+{
+    if (array == nullptr)
+        throw invalid_argument("Массив не существует");
 
-	delete[] piArray;
-	return 0;
+    stringstream buffer;
+    buffer << "{";
+    for (size_t index = 0; index < size - 1; index++)
+    {
+        buffer << array[index] << ", ";
+    }
+    buffer << array[size - 1] << "}";
+    return buffer.str();
+}
+
+void Replace(int* array, const size_t size) {
+    int Value = 0;
+    for (size_t i = 0; i < size; i++) {
+        if (array[i] < Value) {
+            Value = array[i];
+            array[2] = Value;
+        }
+    }
+}
+
+void AddElement(int*& array, size_t& size, const size_t index, const int k) {
+    int* new_array = new int[size + 1];
+    new_array[index] = k;
+    for (size_t i = 0; i < index; i++) {
+        new_array[i] = array[i];
+    }
+    for (size_t i = index + 1; i < size + 1; i++) {
+        new_array[i] = array[i - 1];
+    }
+    delete[] array;
+    array = new_array;
+    size = size + 1;
+}
+
+void Paste(int*& array, size_t& size, const int k) {
+    for (size_t i = 0; i < size; i++) {
+        int value = (array[i]);
+        if (value % 10 == 1) {
+            AddElement(array, size, i, k);
+            i++;
+        }
+        if (value / 10 == 1) {
+            AddElement(array, size, i, k);
+            i++;
+        }
+        if (value / 10 == -1) {
+            AddElement(array, size, i, k);
+            i++;
+        }
+    }
+}
+
+int* FormArray(int* array_d, const size_t size) {
+    int* array_a = new int[size];
+    for (size_t i = 0; i < size; i++) {
+        if (i % 2 == 0) {
+            array_a[i] = pow(array_d[i],2);
+        }
+        else {
+            array_a[i] = array_d[i] / i;
+        }
+    }
+    return array_a;
 }

@@ -42,7 +42,7 @@ size_t GetSize(const string& message);
  * \param size Размер массива
  * \return Строка со значениями индексов массива
  */
-string toString(const int*, const size_t size);
+string ToString(const int*, const size_t size);
 
 /**
  * \brief Функция для нахождения суммы элементов, имеющих нечетное значение
@@ -52,17 +52,16 @@ string toString(const int*, const size_t size);
 int Sum(int*, const size_t size);
 
 /**
- * \brief Находит индексы элементов значения которых меньше A
+ * \brief Вывод индексов элементов массива, значение которых меньше А
  * \param size Размер массива
- * \param a Число a
- * \return Индексы элементов
+ * \param a Значение А, вводимое пользователем
+ * \return Строка с индексами элементов массива, значения которых меньше А
  */
-void Index(int*, const size_t size, const int a);
+string ToStringIndex(const int*, const size_t size, const int a);
 
 /**
  * \brief Функция для замены второго элемента массива на максимальный (математически) среди отрицательных
  * \param size Размер массива
- * \return Массив с совершенной заменой
  */
 void Replace(int*, const size_t size);
 
@@ -85,16 +84,16 @@ int main()
         cin >> input_type;
         my_array = GetArray(size, input_type, min_value, max_value);
         cout << "Итоговый массив:\n";
-        cout << toString(my_array, size);
+        cout << ToString(my_array, size);
         cout << "\nСумма элементов, имеющих нечетное значение: " << Sum(my_array, size) << '\n';
         int a;
         cout << "Введите число A: ";
         cin >> a;
         cout << "Индексы: ";
-        Index(my_array, size, a);
+        cout << ToStringIndex(my_array, size, a);
         cout << "\nМассив после замены второго элемента массива на максимальный среди отрицательных:\n";
         Replace(my_array, size);
-        cout << toString(my_array, size);
+        cout << ToString(my_array, size);
     }
     catch (exception& e)
     {
@@ -120,7 +119,6 @@ size_t GetSize(const string& message)
     {
         throw out_of_range("Неправильный размер массива");
     }
-
     return size;
 }
 
@@ -154,7 +152,7 @@ int* GetArray(const size_t size, const int selection, const int min_value, const
     return array;
 }
 
-string toString(const int* array, const size_t size)
+string ToString(const int* array, const size_t size)
 {
     if (array == nullptr)
         throw invalid_argument("Массив не существует");
@@ -169,29 +167,38 @@ string toString(const int* array, const size_t size)
     return buffer.str();
 }
 
-int Sum(int* array, const size_t size) {
+int Sum(int* array, const size_t size) 
+{
     int sum = 0;
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) 
+    {
         if (array[i] % 2)
             sum += array[i];
     }
     return sum;
 }
 
-void Index(int* array, const size_t size, const int a) {
-    for (size_t i = 0; i < size; i++) {
-        if ((array[i]) < a) {
-            cout << i << endl;
+string ToStringIndex(const int* array, const size_t size, const int a)
+{
+    stringstream buffer;
+    for (size_t i = 0; i < size; i++) 
+    {
+        if ((array[i]) < a)
+        {
+            buffer << i << " ";
         }
     }
+    return buffer.str();
 }
 
-void Replace(int* array, const size_t size) {
-    int Value = 0;
-    for (size_t i = 0; i < size; i++) {
-        if (array[i] < Value) {
-            Value = array[i];
-            array[2] = Value;
+void Replace(int* array, const size_t size) 
+{
+    int value = 0;
+    for (size_t i = 0; i < size; i++) 
+    {
+        if (array[i] < value) {
+            value = array[i];
+            array[2] = value;
         }
     }
 }

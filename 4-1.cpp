@@ -80,9 +80,9 @@ int main()
     {
         const auto size = GetSize("Введите размер массива: ");
         cout << "Выберите способ создания массива: " << static_cast<int>(Choice::Manual) << " - вручную, " << static_cast<int>(Choice::Random) << " - заполнить случайными числами ";
-        int input_type;
-        cin >> input_type;
-        my_array = GetArray(size, input_type, min_value, max_value);
+        int selection;
+        cin >> selection;
+        my_array = GetArray(size, selection, min_value, max_value);
         cout << "Итоговый массив:\n";
         cout << ToString(my_array, size);
         cout << "\nСумма элементов, имеющих нечетное значение: " << Sum(my_array, size) << '\n';

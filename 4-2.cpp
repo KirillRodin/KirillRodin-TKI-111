@@ -82,8 +82,6 @@ int main()
     setlocale(LC_ALL, "Russian");
     auto error_code = 0;
     int* my_array = nullptr;
-    int* new_array = nullptr;
-    int* array_a = nullptr;
     const int min_value = -10;
     const int max_value = 10;
     try

@@ -42,7 +42,7 @@ size_t GetSize(const string& message);
  * \param size Размер массива
  * \return Строка со значениями индексов массива
  */
-string toString(const int*, const size_t size);
+string ToString(const int*, const size_t size);
 
 /**
  * \brief Функция для замены второго элемента массива на максимальный среди отрицательных
@@ -51,19 +51,20 @@ string toString(const int*, const size_t size);
 void Replace(int*, const size_t size);
 
 /**
- * \brief Функция для добавления в массив числа K
+ * \brief Массив, в котором перед элементами, значения которых имеют цифру 1 добавлено число К вводимое пользователем
  * \param size Размер массива
- * \param index Номер элемента
+ * \param new_size Размер нового массива
  * \param k Число K вводимое пользователем
+ * \return Возвращает массив, в котором перед элементами, значения которых имеют цифру 1 добавлено число К вводимое пользователем
  */
-void AddElement(int*&, size_t& size, const size_t index, const int k);
+int* AddElement(int* array, size_t size, size_t new_size, const int k);
 
 /**
- * \brief Функция для вставки числа К перед всеми элементами в которых есть цифра 1
+ * \brief Счетчик элементов, значения которых имеют цифру 1
  * \param size Размер массива
- * \param k Число K вводимое пользователем
+ * \return Возвращает количество элементов, значения которых имеют цифру 1
  */
-void Paste(int*&, size_t& size, const int k);
+size_t Сounter(int* array, size_t size);
 
 /**
  * \brief Формирует из массива D массив A по правилу (если номер четный, то значение элемента находится по формуле Ai = Di^2, а если нечетный, то по формуле Ai = Di / i)
@@ -81,28 +82,44 @@ int main()
     setlocale(LC_ALL, "Russian");
     auto error_code = 0;
     int* my_array = nullptr;
+    int* new_array = nullptr;
+    int* array_a = nullptr;
     const int min_value = -10;
     const int max_value = 10;
     try
     {
         auto size = GetSize("Введите размер массива: ");
         cout << "Выберите способ создания массива: " << static_cast<int>(Choice::Manual) << " - вручную, " << static_cast<int>(Choice::Random) << " - заполнить случайными числами ";
-        int input_type;
-        cin >> input_type;
-        my_array = GetArray(size, input_type, min_value, max_value);
+        int selection;
+        cin >> selection;
+        my_array = GetArray(size, selection, min_value, max_value);
         cout << "Итоговый массив:\n";
-        cout << toString(my_array, size);
+        cout << ToString(my_array, size);
         cout << "\nМассив после замены второго элемента массива на максимальный среди отрицательных:\n ";
         Replace(my_array, size);
-        cout << toString(my_array, size);
+        cout << ToString(my_array, size);
         int k;
         cout << "\nВведите число K: ";
         cin >> k;
         cout << "Массив после вставки числа К перед всеми элементами имеющими цифру 1:\n ";
-        Paste(my_array, size, k);
-        cout << toString(my_array, size);
+        size_t counter_add_elements = Сounter(my_array, size);
+        size_t new_size = size + counter_add_elements;
+        int* new_array = AddElement(my_array, size, new_size, k);
+        cout << ToString(new_array, new_size);
         cout << "\nНовый массив:\n ";
-        cout << toString(FormArray(my_array, size), size);
+        int* array_a = FormArray(my_array, size);
+        cout << ToString(array_a, size);
+
+        if (new_array != nullptr) 
+        {
+            delete[] new_array;
+            new_array = nullptr;
+        }
+        if (array_a != nullptr) 
+        {
+            delete array_a;
+            array_a = nullptr;
+        }
     }
     catch (exception& e)
     {
@@ -162,7 +179,7 @@ int* GetArray(const size_t size, const int selection, const int min_value, const
     return array;
 }
 
-string toString(const int* array, const size_t size)
+string ToString(const int* array, const size_t size)
 {
     if (array == nullptr)
         throw invalid_argument("Массив не существует");
@@ -178,52 +195,49 @@ string toString(const int* array, const size_t size)
 }
 
 void Replace(int* array, const size_t size) {
-    int Value = 0;
+    int value = 0;
     for (size_t i = 0; i < size; i++) {
-        if (array[i] < Value) {
-            Value = array[i];
-            array[2] = Value;
+        if (array[i] < value) {
+            value = array[i];
+            array[2] = value;
         }
     }
 }
 
-void AddElement(int*& array, size_t& size, const size_t index, const int k) {
-    int* new_array = new int[size + 1];
-    new_array[index] = k;
-    for (size_t i = 0; i < index; i++) {
-        new_array[i] = array[i];
+int* AddElement(int* array, size_t size, size_t new_size, const int k) {
+    int* new_array = new int[new_size];
+    size_t index = 0;
+    for (size_t i = 0; i < size; i++) {
+        int value = abs(array[i]);
+        if ((value % 10 == 1) || (value / 10 == 1) || (value / 10 == -1)) {
+            new_array[i + index] = k;
+            new_array[i + index + 1] = array[i];
+            index++;
+        }
+        else
+        {
+            new_array[i + index] = array[i];
+        }
     }
-    for (size_t i = index + 1; i < size + 1; i++) {
-        new_array[i] = array[i - 1];
-    }
-    delete[] array;
-    array = new_array;
-    size = size + 1;
+    return new_array;
 }
 
-void Paste(int*& array, size_t& size, const int k) {
+size_t Сounter(int* array, size_t size) {
+    size_t counter_add_elements = 0;
     for (size_t i = 0; i < size; i++) {
-        int value = (array[i]);
-        if (value % 10 == 1) {
-            AddElement(array, size, i, k);
-            i++;
-        }
-        if (value / 10 == 1) {
-            AddElement(array, size, i, k);
-            i++;
-        }
-        if (value / 10 == -1) {
-            AddElement(array, size, i, k);
-            i++;
+        int value = abs(array[i]);
+        if (value % 10 == 1 || value / 10 == 1 || value / 10 == -1) {
+            counter_add_elements++;
         }
     }
+    return counter_add_elements;
 }
 
 int* FormArray(int* array_d, const size_t size) {
     int* array_a = new int[size];
     for (size_t i = 0; i < size; i++) {
         if (i % 2 == 0) {
-            array_a[i] = pow(array_d[i],2);
+            array_a[i] = pow(array_d[i], 2);
         }
         else {
             array_a[i] = array_d[i] / i;
